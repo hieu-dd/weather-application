@@ -4,3 +4,4 @@ plugins {
 rootProject.name = "weather"
 include("common")
 include("service")
+include("ip2location")

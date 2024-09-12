@@ -1,9 +1,6 @@
 package com.bakarot.weather.common.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import org.hibernate.validator.constraints.Length
 
@@ -17,18 +14,22 @@ data class Location(
     var code: String = "",
 
     @Column(length = 128, nullable = false)
-    var cityName: String = "",
+    var cityName: String,
 
     @Column(length = 128)
-    var regionName: String? = null,
+    var regionName: String?,
 
     @Column(length = 64, nullable = false)
-    var countryName: String = "",
+    var countryName: String,
 
     @Column(length = 2, nullable = false)
-    var countryCode: String = "",
+    var countryCode: String,
 
     var enabled: Boolean = false,
 
     var trashed: Boolean = false,
+
+    @OneToOne(mappedBy = "location", cascade = [CascadeType.ALL])
+    @PrimaryKeyJoinColumn
+    var realtimeWeather: RealtimeWeather? = null
 )
