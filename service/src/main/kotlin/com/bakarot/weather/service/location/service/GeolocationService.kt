@@ -27,6 +27,7 @@ class GeolocationService {
     fun getLocation(ip: String): Location {
         try {
             val result = IP2Location.ipQuery(ip)
+            LOGGER.info("Location for IP: $ip is $result")
             if (result.status != "OK") {
                 LOGGER.error("Failed to get location for IP: $ip")
                 throw RuntimeException("Failed to get location for IP with status: ${result.status}")

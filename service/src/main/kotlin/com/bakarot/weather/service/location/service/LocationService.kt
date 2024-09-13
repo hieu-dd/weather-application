@@ -5,24 +5,24 @@ import com.bakarot.weather.service.location.repository.LocationRepository
 import org.springframework.stereotype.Service
 
 
-interface LocationService {
-    fun getLocations(): List<Location>
-    fun saveLocation(location: Location): Location
-    fun removeLocation(code: String)
-}
-
 @Service
-class LocationServiceImpl(private val locationRepository: LocationRepository) : LocationService {
-    override fun saveLocation(location: Location): Location {
+class LocationService(private val locationRepository: LocationRepository) {
+    fun saveLocation(location: Location): Location {
         val dbLocation = locationRepository.save(location)
         return dbLocation
     }
 
-    override fun getLocations(): List<Location> {
+    fun getLocations(): List<Location> {
         return locationRepository.findAll().toList()
     }
 
-    override fun removeLocation(code: String) {
+    fun removeLocation(code: String) {
         locationRepository.deleteById(code)
+    }
+
+    fun getLocation(code: String): Location {
+        return locationRepository.findById(code).orElseThrow {
+            RuntimeException("Location not found for code: $code")
+        }
     }
 }

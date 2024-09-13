@@ -11,7 +11,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(18)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -30,6 +30,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	// model mapper
+	implementation("org.modelmapper:modelmapper:2.4.4")
 }
 
 kotlin {
