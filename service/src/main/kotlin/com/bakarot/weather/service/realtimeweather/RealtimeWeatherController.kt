@@ -1,25 +1,22 @@
 package com.bakarot.weather.service.realtimeweather
 
+import com.bakarot.weather.common.entity.RealtimeWeather
 import com.bakarot.weather.service.location.service.GeolocationService
-import com.bakarot.weather.service.location.service.LocationService
 import com.bakarot.weather.service.realtimeweather.dto.RealtimeWeatherDTO
 import com.bakarot.weather.service.realtimeweather.service.RealtimeWeatherService
 import com.bakarot.weather.service.util.CommonUtility
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.Valid
 import org.modelmapper.ModelMapper
 import org.slf4j.Logger
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1/realtime")
 class RealtimeWeatherController(
     private val realtimeWeatherService: RealtimeWeatherService,
     private val geolocationService: GeolocationService,
-    private val locationService: LocationService,
     private val modalMapper: ModelMapper,
 ) {
     companion object {
@@ -43,9 +40,22 @@ class RealtimeWeatherController(
     @GetMapping("/{code}")
     fun getRealtimeWeatherByLocationCode(@PathVariable code: String): ResponseEntity<Any> {
         try {
-            val location = locationService.getLocation(code)
-            val realtimeWeather = realtimeWeatherService.getByLocation(location)
+            val realtimeWeather = realtimeWeatherService.getByLocationCode(code)
             val dto = modalMapper.map(realtimeWeather, RealtimeWeatherDTO::class.java)
+            return ResponseEntity.ok(dto)
+        } catch (e: Exception) {
+            return ResponseEntity.badRequest().body(e.message)
+        }
+    }
+
+    @PutMapping("/{code}")
+    fun updateRealtimeWeatherByLocationCode(
+        @PathVariable code: String,
+        @Valid @RequestBody realtimeWeather: RealtimeWeather,
+    ): ResponseEntity<Any> {
+        try {
+            val dbRealtimeWeather = realtimeWeatherService.updateByLocationCode(code, realtimeWeather)
+            val dto = modalMapper.map(dbRealtimeWeather, RealtimeWeatherDTO::class.java)
             return ResponseEntity.ok(dto)
         } catch (e: Exception) {
             return ResponseEntity.badRequest().body(e.message)

@@ -11,6 +11,6 @@ interface RealtimeWeatherRepository : CrudRepository<RealtimeWeather, String> {
     @Query("SELECT r FROM RealtimeWeather r WHERE r.location.countryCode = ?1 AND r.location.cityName = ?2")
     fun findByCountryCodeAndCity(countryCode: String, city: String): RealtimeWeather?
 
-    @Query("SELECT r FROM RealtimeWeather r WHERE r.id = ?1 AND r.location.trashed = false")
+    @Query("SELECT r FROM RealtimeWeather r WHERE r.locationCode = ?1 AND r.location.trashed = false")
     fun findByLocationCode(locationCode: String): RealtimeWeather?
 }
